@@ -1,0 +1,25 @@
+{
+  "name": "patrickrose/flysystem-redis",
+  "description": "A Flysystem adapter for Redis",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Patrick Rose",
+      "email": "pjr0911025+github@googlemail.com"
+    }
+  ],
+  "require": {
+    "league/flysystem": "~1",
+    "predis/predis": "~1"
+  },
+  "require-dev": {
+    "phpspec/phpspec": "2.1.*",
+    "phpunit/phpunit": "~5"
+  },
+  "autoload": {
+    "psr-4": {
+      "PatrickRose\\Flysystem\\Redis\\": "src/"
+    }
+  }
+}
