@@ -5,7 +5,6 @@ namespace PatrickRose\Flysystem\Redis;
 use League\Flysystem\Adapter\Polyfill\NotSupportingVisibilityTrait;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
-use League\Flysystem\NotSupportedException;
 use League\Flysystem\Util;
 use Predis\ClientInterface;
 
