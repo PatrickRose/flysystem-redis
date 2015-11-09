@@ -5,6 +5,7 @@ namespace PatrickRose\Flysystem\Redis;
 use League\Flysystem\Adapter\Polyfill\NotSupportingVisibilityTrait;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
+use League\Flysystem\NotSupportedException;
 use League\Flysystem\Util;
 use Predis\ClientInterface;
 
@@ -234,7 +235,7 @@ class RedisAdapter implements AdapterInterface
      */
     public function getMetadata($path)
     {
-        // TODO: Implement getMetadata() method.
+        return [];
     }
 
     /**
@@ -246,7 +247,7 @@ class RedisAdapter implements AdapterInterface
      */
     public function getSize($path)
     {
-        // TODO: Implement getSize() method.
+        return [];
     }
 
     /**
@@ -258,7 +259,7 @@ class RedisAdapter implements AdapterInterface
      */
     public function getMimetype($path)
     {
-        // TODO: Implement getMimetype() method.
+        return [];
     }
 
     /**
@@ -270,6 +271,6 @@ class RedisAdapter implements AdapterInterface
      */
     public function getTimestamp($path)
     {
-        // TODO: Implement getTimestamp() method.
+        return [];
     }
 }

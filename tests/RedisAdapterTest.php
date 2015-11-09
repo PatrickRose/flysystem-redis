@@ -34,8 +34,8 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'set' => [
-                'expects'    => $this->once(),
-                'with'       => [$this->equalTo('foo'), $this->equalTo('bar')],
+                'expects' => $this->once(),
+                'with' => [$this->equalTo('foo'), $this->equalTo('bar')],
                 'willReturn' => true,
             ],
         ]);
@@ -43,7 +43,7 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
         $adapter = new RedisAdapter($client);
         $this->assertEquals(
             [
-                'path'     => 'foo',
+                'path' => 'foo',
                 'contents' => 'bar',
             ],
             $adapter->write('foo', 'bar', new Config())
@@ -54,8 +54,8 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'set' => [
-                'expects'    => $this->once(),
-                'with'       => [$this->equalTo('foo'), $this->equalTo('bar')],
+                'expects' => $this->once(),
+                'with' => [$this->equalTo('foo'), $this->equalTo('bar')],
                 'willReturn' => false,
             ],
         ]);
@@ -71,8 +71,8 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'set' => [
-                'expects'    => $this->once(),
-                'with'       => [$this->equalTo('foo'), $this->equalTo('bar')],
+                'expects' => $this->once(),
+                'with' => [$this->equalTo('foo'), $this->equalTo('bar')],
                 'willReturn' => true,
             ],
         ]);
@@ -83,7 +83,7 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             [
-                'path'     => 'foo',
+                'path' => 'foo',
                 'contents' => 'bar',
             ],
             $adapter->writeStream('foo', $stream, new Config())
@@ -94,8 +94,8 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'set' => [
-                'expects'    => $this->once(),
-                'with'       => [$this->equalTo('foo'), $this->equalTo('bar')],
+                'expects' => $this->once(),
+                'with' => [$this->equalTo('foo'), $this->equalTo('bar')],
                 'willReturn' => true,
             ],
         ]);
@@ -103,7 +103,7 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
         $adapter = new RedisAdapter($client);
         $this->assertEquals(
             [
-                'path'     => 'foo',
+                'path' => 'foo',
                 'contents' => 'bar',
             ],
             $adapter->update('foo', 'bar', new Config())
@@ -114,8 +114,8 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'set' => [
-                'expects'    => $this->once(),
-                'with'       => [$this->equalTo('foo'), $this->equalTo('bar')],
+                'expects' => $this->once(),
+                'with' => [$this->equalTo('foo'), $this->equalTo('bar')],
                 'willReturn' => false,
             ],
         ]);
@@ -131,8 +131,8 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'set' => [
-                'expects'    => $this->once(),
-                'with'       => [$this->equalTo('foo'), $this->equalTo('bar')],
+                'expects' => $this->once(),
+                'with' => [$this->equalTo('foo'), $this->equalTo('bar')],
                 'willReturn' => true,
             ],
         ]);
@@ -143,7 +143,7 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             [
-                'path'     => 'foo',
+                'path' => 'foo',
                 'contents' => 'bar',
             ],
             $adapter->updateStream('foo', $stream, new Config())
@@ -153,7 +153,7 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     public function visibilities()
     {
         return [
-            'Public'  => [AdapterInterface::VISIBILITY_PUBLIC],
+            'Public' => [AdapterInterface::VISIBILITY_PUBLIC],
             'Private' => [AdapterInterface::VISIBILITY_PRIVATE],
         ];
     }
@@ -183,8 +183,8 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'rename' => [
-                'expects'    => $this->once(),
-                'with'       => ['foo', 'bar'],
+                'expects' => $this->once(),
+                'with' => ['foo', 'bar'],
                 'willReturn' => true,
             ],
         ]);
@@ -198,8 +198,8 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'rename' => [
-                'expects'    => $this->once(),
-                'with'       => ['foo', 'bar'],
+                'expects' => $this->once(),
+                'with' => ['foo', 'bar'],
                 'willReturn' => false,
             ],
         ]);
@@ -213,13 +213,13 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'get' => [
-                'expects'    => $this->once(),
-                'with'       => ['foo'],
+                'expects' => $this->once(),
+                'with' => ['foo'],
                 'willReturn' => 'baz',
             ],
             'set' => [
-                'expects'    => $this->once(),
-                'with'       => ['bar', 'baz'],
+                'expects' => $this->once(),
+                'with' => ['bar', 'baz'],
                 'willReturn' => true,
             ],
         ]);
@@ -233,13 +233,13 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'get' => [
-                'expects'    => $this->once(),
-                'with'       => ['foo'],
+                'expects' => $this->once(),
+                'with' => ['foo'],
                 'willReturn' => false,
             ],
             'set' => [
-                'expects'    => $this->never(),
-                'with'       => ['bar' , false],
+                'expects' => $this->never(),
+                'with' => ['bar', false],
                 'willReturn' => true,
             ],
         ]);
@@ -253,13 +253,13 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'get' => [
-                'expects'    => $this->once(),
-                'with'       => ['foo'],
+                'expects' => $this->once(),
+                'with' => ['foo'],
                 'willReturn' => 'baz',
             ],
             'set' => [
-                'expects'    => $this->once(),
-                'with'       => ['bar', 'baz'],
+                'expects' => $this->once(),
+                'with' => ['bar', 'baz'],
                 'willReturn' => false,
             ],
         ]);
@@ -273,8 +273,8 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'del' => [
-                'expects'    => $this->once(),
-                'with'       => [['foo']],
+                'expects' => $this->once(),
+                'with' => [['foo']],
                 'willReturn' => true,
             ],
         ]);
@@ -288,8 +288,8 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'del' => [
-                'expects'    => $this->once(),
-                'with'       => [['foo']],
+                'expects' => $this->once(),
+                'with' => [['foo']],
                 'willReturn' => false,
             ],
         ]);
@@ -303,13 +303,13 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'keys' => [
-                'expects'    => $this->once(),
-                'with'       => ['foo/*'],
+                'expects' => $this->once(),
+                'with' => ['foo/*'],
                 'willReturn' => ['foo/bar', 'foo/baz', 'foo/foo/bar'],
             ],
             'del' => [
-                'expects'    => $this->once(),
-                'with'       => [['foo/bar', 'foo/baz', 'foo/foo/bar']],
+                'expects' => $this->once(),
+                'with' => [['foo/bar', 'foo/baz', 'foo/foo/bar']],
                 'willReturn' => true,
             ],
         ]);
@@ -331,7 +331,7 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     public function trueFalse()
     {
         return [
-            'true'  => [true],
+            'true' => [true],
             'false' => [false],
         ];
     }
@@ -343,8 +343,8 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'exists' => [
-                'expects'    => $this->once(),
-                'with'       => ['foo'],
+                'expects' => $this->once(),
+                'with' => ['foo'],
                 'willReturn' => $keyExists ? 1 : 0,
             ],
         ]);
@@ -358,8 +358,8 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'get' => [
-                'expects'    => $this->once(),
-                'with'       => ['foo'],
+                'expects' => $this->once(),
+                'with' => ['foo'],
                 'willReturn' => 'key contents',
             ],
         ]);
@@ -373,8 +373,8 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'get' => [
-                'expects'    => $this->once(),
-                'with'       => ['foo'],
+                'expects' => $this->once(),
+                'with' => ['foo'],
                 'willReturn' => 'key contents',
             ],
         ]);
@@ -391,8 +391,8 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'keys' => [
-                'expects'    => $this->once(),
-                'with'       => ['foo/*'],
+                'expects' => $this->once(),
+                'with' => ['foo/*'],
                 'willReturn' => ['foo/bar', 'foo/baz', 'foo/far/faz'],
             ],
             'get' => [],
@@ -424,14 +424,14 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $client = $this->getClientInterface([
             'keys' => [
-                'expects'    => $this->once(),
-                'with'       => ['foo/*'],
+                'expects' => $this->once(),
+                'with' => ['foo/*'],
                 'willReturn' => ['foo/bar', 'foo/baz', 'foo/far/faz'],
             ],
             'get' => [],
         ]);
 
-        $client->expects($this->exactly(2))->method('get')
+        $client->expects($this->exactly(3))->method('get')
             ->withConsecutive(
                 ['foo/bar'],
                 ['foo/baz'],
@@ -445,13 +445,51 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
 
         $adapter = new RedisAdapter($client);
 
-        $this->assertEquals([
-            'foo/bar' => [
-                'type' => 'text/plain',
+        $this->assertEquals(
+            [
+                'foo/bar' => [
+                    'type' => 'text/plain',
+                ],
+                'foo/baz' => [
+                    'type' => 'text/plain',
+                ],
+                'foo/far/faz' => [
+                    'type' => 'text/plain',
+                ],
             ],
-            'foo/baz' => [
-                'type' => 'text/plain',
-            ],
-        ], $adapter->listContents('foo'));
+            $adapter->listContents('foo', true)
+        );
+    }
+
+    public function testItReturnsNothingForMetadata()
+    {
+        $adapter = new RedisAdapter($this->getClientInterface([]));
+
+        $this->assertEquals([], $adapter->getMetadata('foo'));
+        $this->assertEquals([], $adapter->getMetadata('bar'));
+    }
+
+    public function testItReturnsNothingForSize()
+    {
+        $adapter = new RedisAdapter($this->getClientInterface([]));
+
+        $this->assertEquals([], $adapter->getSize('foo'));
+        $this->assertEquals([], $adapter->getSize('bar'));
+    }
+
+    public function testItReturnsNothingForTheMimetype()
+    {
+        $adapter = new RedisAdapter($this->getClientInterface([]));
+
+        $this->assertEquals([], $adapter->getMimetype('foo'));
+        $this->assertEquals([], $adapter->getMimetype('bar'));
+    }
+
+    public function testItReturnsNothingForTheTimestamp()
+    {
+        $adapter = new RedisAdapter($this->getClientInterface([]));
+
+        $this->assertEquals([], $adapter->getTimestamp('foo'));
+        $this->assertEquals([], $adapter->getTimestamp('bar'));
     }
 }
