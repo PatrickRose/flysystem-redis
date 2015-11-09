@@ -3,6 +3,7 @@
 namespace PatrickRose\Flysystem\Redis;
 
 use League\Flysystem\Adapter\Polyfill\NotSupportingVisibilityTrait;
+use League\Flysystem\Adapter\Polyfill\StreamedTrait;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
@@ -10,7 +11,7 @@ use Predis\ClientInterface;
 
 class RedisAdapter implements AdapterInterface
 {
-    use NotSupportingVisibilityTrait;
+    use NotSupportingVisibilityTrait, StreamedTrait;
 
     const EXPIRE_IN_SECONDS = 'EX';
     const EXPIRE_IN_MILLISECONDS = 'PX';
@@ -51,24 +52,6 @@ class RedisAdapter implements AdapterInterface
     }
 
     /**
-     * Write a new file using a stream.
-     *
-     * @param string   $path
-     * @param resource $resource
-     * @param Config   $config   Config object
-     *
-     * @return array|false false on failure file meta data on success
-     */
-    public function writeStream($path, $resource, Config $config)
-    {
-        if (!rewind($resource)) {
-            return false;
-        }
-
-        return $this->write($path, stream_get_contents($resource), $config);
-    }
-
-    /**
      * Update a file.
      *
      * @param string $path
@@ -80,20 +63,6 @@ class RedisAdapter implements AdapterInterface
     public function update($path, $contents, Config $config)
     {
         return $this->write($path, $contents, $config);
-    }
-
-    /**
-     * Update a file using a stream.
-     *
-     * @param string   $path
-     * @param resource $resource
-     * @param Config   $config   Config object
-     *
-     * @return array|false false on failure file meta data on success
-     */
-    public function updateStream($path, $resource, Config $config)
-    {
-        return $this->writeStream($path, $resource, $config);
     }
 
     /**
