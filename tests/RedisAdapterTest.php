@@ -497,10 +497,10 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'Expire in seconds' => [
-                RedisAdapter::EXPIRE_IN_SECONDS
+                RedisAdapter::EXPIRE_IN_SECONDS,
             ],
             'Expire in milliseconds' => [
-                RedisAdapter::EXPIRE_IN_MILLISECONDS
+                RedisAdapter::EXPIRE_IN_MILLISECONDS,
             ],
         ];
     }
@@ -510,14 +510,14 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testItCanSetTheExpirationValue($expirationType)
     {
-        $client =  $this->getClientInterface([
+        $client = $this->getClientInterface([
             'set' => [
                 'expects' => $this->once(),
-                'with' => [
-                    'foo', 'bar', $expirationType, 100
+                'with'    => [
+                    'foo', 'bar', $expirationType, 100,
                 ],
-                'willReturn' => true
-            ]
+                'willReturn' => true,
+            ],
         ]);
 
         $adapter = new RedisAdapter($client);
@@ -529,14 +529,14 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testIfTheTTLIsSetTheExpirationTypeIsDefaultedToSeconds()
     {
-        $client =  $this->getClientInterface([
+        $client = $this->getClientInterface([
             'set' => [
                 'expects' => $this->once(),
-                'with' => [
-                    'foo', 'bar', RedisAdapter::EXPIRE_IN_SECONDS, 100
+                'with'    => [
+                    'foo', 'bar', RedisAdapter::EXPIRE_IN_SECONDS, 100,
                 ],
-                'willReturn' => true
-            ]
+                'willReturn' => true,
+            ],
         ]);
 
         $adapter = new RedisAdapter($client);
@@ -549,7 +549,7 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     public function flagsToSet()
     {
         return [
-            'set if key exists' => [RedisAdapter::SET_IF_KEY_EXISTS],
+            'set if key exists'     => [RedisAdapter::SET_IF_KEY_EXISTS],
             'set if key not exists' => [RedisAdapter::SET_IF_KEY_NOT_EXISTS],
         ];
     }
@@ -559,14 +559,14 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanSetTheFlagForSettingTheKey($sFlag)
     {
-        $client =  $this->getClientInterface([
+        $client = $this->getClientInterface([
             'set' => [
                 'expects' => $this->once(),
-                'with' => [
-                    'foo', 'bar', null, null, $sFlag
+                'with'    => [
+                    'foo', 'bar', null, null, $sFlag,
                 ],
-                'willReturn' => true
-            ]
+                'willReturn' => true,
+            ],
         ]);
 
         $adapter = new RedisAdapter($client);
@@ -575,6 +575,4 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotFalse($adapter->write('foo', 'bar', $config));
     }
-
-
 }

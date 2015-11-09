@@ -39,8 +39,7 @@ class RedisAdapter implements AdapterInterface
      */
     public function write($path, $contents, Config $config)
     {
-        if ($config->has('ttl') && !$config->has('expirationType'))
-        {
+        if ($config->has('ttl') && !$config->has('expirationType')) {
             $config->set('expirationType', self::EXPIRE_IN_SECONDS);
         }
 
