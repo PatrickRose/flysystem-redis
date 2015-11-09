@@ -12,6 +12,12 @@ class RedisAdapter implements AdapterInterface
 {
     use NotSupportingVisibilityTrait;
 
+    const EXPIRE_IN_SECONDS = 'EX';
+    const EXPIRE_IN_MILLISECONDS = 'PX';
+
+    const SET_IF_KEY_NOT_EXISTS = 'NX';
+    const SET_IF_KEY_EXISTS = 'XX';
+
     /**
      * @var Client
      */
@@ -33,7 +39,12 @@ class RedisAdapter implements AdapterInterface
      */
     public function write($path, $contents, Config $config)
     {
-        if (!$this->client->set($path, $contents)) {
+        if ($config->has('ttl') && !$config->has('expirationType'))
+        {
+            $config->set('expirationType', self::EXPIRE_IN_SECONDS);
+        }
+
+        if (!$this->client->set($path, $contents, $config->get('expirationType'), $config->get('ttl'), $config->get('setFlag'))) {
             return false;
         }
 

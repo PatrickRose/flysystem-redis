@@ -492,4 +492,89 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $adapter->getTimestamp('foo'));
         $this->assertEquals([], $adapter->getTimestamp('bar'));
     }
+
+    public function expirationConfigOptions()
+    {
+        return [
+            'Expire in seconds' => [
+                RedisAdapter::EXPIRE_IN_SECONDS
+            ],
+            'Expire in milliseconds' => [
+                RedisAdapter::EXPIRE_IN_MILLISECONDS
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider expirationConfigOptions
+     */
+    public function testItCanSetTheExpirationValue($expirationType)
+    {
+        $client =  $this->getClientInterface([
+            'set' => [
+                'expects' => $this->once(),
+                'with' => [
+                    'foo', 'bar', $expirationType, 100
+                ],
+                'willReturn' => true
+            ]
+        ]);
+
+        $adapter = new RedisAdapter($client);
+
+        $config = new Config(['expirationType' => $expirationType, 'ttl' => 100]);
+
+        $this->assertNotFalse($adapter->write('foo', 'bar', $config));
+    }
+
+    public function testIfTheTTLIsSetTheExpirationTypeIsDefaultedToSeconds()
+    {
+        $client =  $this->getClientInterface([
+            'set' => [
+                'expects' => $this->once(),
+                'with' => [
+                    'foo', 'bar', RedisAdapter::EXPIRE_IN_SECONDS, 100
+                ],
+                'willReturn' => true
+            ]
+        ]);
+
+        $adapter = new RedisAdapter($client);
+
+        $config = new Config(['ttl' => 100]);
+
+        $this->assertNotFalse($adapter->write('foo', 'bar', $config));
+    }
+
+    public function flagsToSet()
+    {
+        return [
+            'set if key exists' => [RedisAdapter::SET_IF_KEY_EXISTS],
+            'set if key not exists' => [RedisAdapter::SET_IF_KEY_NOT_EXISTS],
+        ];
+    }
+
+    /**
+     * @dataProvider flagsToSet
+     */
+    public function testCanSetTheFlagForSettingTheKey($sFlag)
+    {
+        $client =  $this->getClientInterface([
+            'set' => [
+                'expects' => $this->once(),
+                'with' => [
+                    'foo', 'bar', null, null, $sFlag
+                ],
+                'willReturn' => true
+            ]
+        ]);
+
+        $adapter = new RedisAdapter($client);
+
+        $config = new Config(['setFlag' => $sFlag]);
+
+        $this->assertNotFalse($adapter->write('foo', 'bar', $config));
+    }
+
+
 }
