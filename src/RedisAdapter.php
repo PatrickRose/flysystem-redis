@@ -10,7 +10,6 @@ use Predis\ClientInterface;
 
 class RedisAdapter implements AdapterInterface
 {
-
     use NotSupportingVisibilityTrait;
 
     /**
@@ -28,13 +27,13 @@ class RedisAdapter implements AdapterInterface
      *
      * @param string $path
      * @param string $contents
-     * @param Config $config Config object
+     * @param Config $config   Config object
+     *
      * @return array|false false on failure file meta data on success
      */
     public function write($path, $contents, Config $config)
     {
-        if (!$this->client->set($path, $contents))
-        {
+        if (!$this->client->set($path, $contents)) {
             return false;
         }
 
@@ -46,13 +45,13 @@ class RedisAdapter implements AdapterInterface
      *
      * @param string   $path
      * @param resource $resource
-     * @param Config   $config Config object
+     * @param Config   $config   Config object
+     *
      * @return array|false false on failure file meta data on success
      */
     public function writeStream($path, $resource, Config $config)
     {
-        if (!rewind($resource))
-        {
+        if (!rewind($resource)) {
             return false;
         }
 
@@ -64,7 +63,8 @@ class RedisAdapter implements AdapterInterface
      *
      * @param string $path
      * @param string $contents
-     * @param Config $config Config object
+     * @param Config $config   Config object
+     *
      * @return array|false false on failure file meta data on success
      */
     public function update($path, $contents, Config $config)
@@ -77,7 +77,8 @@ class RedisAdapter implements AdapterInterface
      *
      * @param string   $path
      * @param resource $resource
-     * @param Config   $config Config object
+     * @param Config   $config   Config object
+     *
      * @return array|false false on failure file meta data on success
      */
     public function updateStream($path, $resource, Config $config)
@@ -90,6 +91,7 @@ class RedisAdapter implements AdapterInterface
      *
      * @param string $path
      * @param string $newpath
+     *
      * @return bool
      */
     public function rename($path, $newpath)
@@ -102,14 +104,14 @@ class RedisAdapter implements AdapterInterface
      *
      * @param string $path
      * @param string $newpath
+     *
      * @return bool
      */
     public function copy($path, $newpath)
     {
         $keyValue = $this->client->get($path);
 
-        if ($keyValue === false)
-        {
+        if ($keyValue === false) {
             return false;
         }
 
@@ -120,6 +122,7 @@ class RedisAdapter implements AdapterInterface
      * Delete a file.
      *
      * @param string $path
+     *
      * @return bool
      */
     public function delete($path)
@@ -131,11 +134,12 @@ class RedisAdapter implements AdapterInterface
      * Delete a directory.
      *
      * @param string $dirname
+     *
      * @return bool
      */
     public function deleteDir($dirname)
     {
-        return $this->client->del($this->client->keys($dirname . '/*'));
+        return $this->client->del($this->client->keys($dirname.'/*'));
     }
 
     /**
@@ -143,12 +147,13 @@ class RedisAdapter implements AdapterInterface
      *
      * @param string $dirname directory name
      * @param Config $config
+     *
      * @return array|false
      */
     public function createDir($dirname, Config $config)
     {
         return [
-            'path' => $dirname
+            'path' => $dirname,
         ];
     }
 
@@ -156,6 +161,7 @@ class RedisAdapter implements AdapterInterface
      * Check whether a file exists.
      *
      * @param string $path
+     *
      * @return array|bool|null
      */
     public function has($path)
@@ -167,6 +173,7 @@ class RedisAdapter implements AdapterInterface
      * Read a file.
      *
      * @param string $path
+     *
      * @return array|false
      */
     public function read($path)
@@ -178,6 +185,7 @@ class RedisAdapter implements AdapterInterface
      * Read a file as a stream.
      *
      * @param string $path
+     *
      * @return array|false
      */
     public function readStream($path)
@@ -185,6 +193,7 @@ class RedisAdapter implements AdapterInterface
         $stream = tmpfile();
         fwrite($stream, $this->client->get($path));
         rewind($stream);
+
         return ['stream' => $stream];
     }
 
@@ -193,18 +202,17 @@ class RedisAdapter implements AdapterInterface
      *
      * @param string $directory
      * @param bool   $recursive
+     *
      * @return array
      */
     public function listContents($directory = '', $recursive = false)
     {
-        $keys = $this->client->keys($directory . '/*');
+        $keys = $this->client->keys($directory.'/*');
 
         $values = [];
 
-        foreach($keys as $key)
-        {
-            if (!$recursive && preg_match("|$directory/.+/|", $key) !== 0)
-            {
+        foreach ($keys as $key) {
+            if (!$recursive && preg_match("|$directory/.+/|", $key) !== 0) {
                 continue;
             }
 
@@ -221,6 +229,7 @@ class RedisAdapter implements AdapterInterface
      * Get all the meta data of a file or directory.
      *
      * @param string $path
+     *
      * @return array|false
      */
     public function getMetadata($path)
@@ -232,6 +241,7 @@ class RedisAdapter implements AdapterInterface
      * Get all the meta data of a file or directory.
      *
      * @param string $path
+     *
      * @return array|false
      */
     public function getSize($path)
@@ -243,6 +253,7 @@ class RedisAdapter implements AdapterInterface
      * Get the mimetype of a file.
      *
      * @param string $path
+     *
      * @return array|false
      */
     public function getMimetype($path)
@@ -254,6 +265,7 @@ class RedisAdapter implements AdapterInterface
      * Get the timestamp of a file.
      *
      * @param string $path
+     *
      * @return array|false
      */
     public function getTimestamp($path)
