@@ -282,4 +282,12 @@ class RedisAdapter implements AdapterInterface
     {
         return [];
     }
+
+    /**
+     * @return Client
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
 }
