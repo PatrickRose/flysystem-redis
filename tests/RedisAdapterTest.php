@@ -4,13 +4,12 @@ namespace PatrickRose\Flysystem\Redis;
 
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
-use Predis\ClientInterface;
 
 class RedisAdapterTest extends \PHPUnit_Framework_TestCase
 {
     public function getClientInterface(array $methods)
     {
-        $mock = $this->getMockBuilder(ClientInterface::class)
+        $mock = $this->getMockBuilder('Predis\ClientInterface')
             ->setMethods(array_keys($methods))
             ->getMockForAbstractClass();
 

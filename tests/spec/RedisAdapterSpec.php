@@ -2,7 +2,6 @@
 
 namespace spec\PatrickRose\Flysystem\Redis;
 
-use League\Flysystem\AdapterInterface;
 use PhpSpec\ObjectBehavior;
 
 class RedisAdapterSpec extends ObjectBehavior
@@ -18,6 +17,6 @@ class RedisAdapterSpec extends ObjectBehavior
     public function it_is_initializable()
     {
         $this->shouldHaveType('PatrickRose\Flysystem\Redis\RedisAdapter');
-        $this->shouldHaveType(AdapterInterface::class);
+        $this->shouldHaveType('League\Flysystem\AdapterInterface');
     }
 }
