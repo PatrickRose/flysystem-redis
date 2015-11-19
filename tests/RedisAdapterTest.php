@@ -413,11 +413,11 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([
             'foo/bar' => [
                 'mimetype' => 'text/plain',
-                'type' => 'file',
+                'type'     => 'file',
             ],
             'foo/baz' => [
                 'mimetype' => 'text/plain',
-                'type' => 'file',
+                'type'     => 'file',
             ],
         ], $adapter->listContents('foo'));
     }
@@ -451,15 +451,15 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
             [
                 'foo/bar' => [
                     'mimetype' => 'text/plain',
-                    'type' => 'file',
+                    'type'     => 'file',
                 ],
                 'foo/baz' => [
                     'mimetype' => 'text/plain',
-                    'type' => 'file',
+                    'type'     => 'file',
                 ],
                 'foo/far/faz' => [
                     'mimetype' => 'text/plain',
-                    'type' => 'file',
+                    'type'     => 'file',
                 ],
             ],
             $adapter->listContents('foo', true)
