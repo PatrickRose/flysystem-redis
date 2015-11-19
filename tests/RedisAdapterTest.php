@@ -412,10 +412,12 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals([
             'foo/bar' => [
-                'type' => 'text/plain',
+                'mimetype' => 'text/plain',
+                'type' => 'file',
             ],
             'foo/baz' => [
-                'type' => 'text/plain',
+                'mimetype' => 'text/plain',
+                'type' => 'file',
             ],
         ], $adapter->listContents('foo'));
     }
@@ -448,49 +450,86 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             [
                 'foo/bar' => [
-                    'type' => 'text/plain',
+                    'mimetype' => 'text/plain',
+                    'type' => 'file',
                 ],
                 'foo/baz' => [
-                    'type' => 'text/plain',
+                    'mimetype' => 'text/plain',
+                    'type' => 'file',
                 ],
                 'foo/far/faz' => [
-                    'type' => 'text/plain',
+                    'mimetype' => 'text/plain',
+                    'type' => 'file',
                 ],
             ],
             $adapter->listContents('foo', true)
         );
     }
 
-    public function testItReturnsNothingForMetadata()
+    public function testItReturnsCorrectlyForMetadata()
     {
-        $adapter = new RedisAdapter($this->getClientInterface([]));
+        $client = $this->getClientInterface(['get' => []]);
 
-        $this->assertEquals([], $adapter->getMetadata('foo'));
-        $this->assertEquals([], $adapter->getMetadata('bar'));
+        $client->expects($this->exactly(2))->method('get')
+            ->withConsecutive(
+                ['foo'],
+                ['bar']
+            )
+            ->willReturnOnConsecutiveCalls(
+                'foo/bar',
+                'foo/baz'
+            );
+        $adapter = new RedisAdapter($client);
+
+        $this->assertEquals(['mimetype' => 'text/plain', 'type' => 'file'], $adapter->getMetadata('foo'));
+        $this->assertEquals(['mimetype' => 'text/plain', 'type' => 'file'], $adapter->getMetadata('bar'));
     }
 
-    public function testItReturnsNothingForSize()
+    public function testItReturnsCorrectlyForSize()
     {
-        $adapter = new RedisAdapter($this->getClientInterface([]));
+        $client = $this->getClientInterface(['get' => [], 'strlen' => []]);
 
-        $this->assertEquals([], $adapter->getSize('foo'));
-        $this->assertEquals([], $adapter->getSize('bar'));
+        $client->expects($this->exactly(2))->method('strlen')
+            ->withConsecutive(
+                ['foo'],
+                ['bar']
+            )
+            ->willReturnOnConsecutiveCalls(
+                7,
+                7
+            );
+
+        $adapter = new RedisAdapter($client);
+
+        $this->assertEquals(['size' => 7], $adapter->getSize('foo'));
+        $this->assertEquals(['size' => 7], $adapter->getSize('bar'));
     }
 
-    public function testItReturnsNothingForTheMimetype()
+    public function testItReturnsTheMimetype()
     {
-        $adapter = new RedisAdapter($this->getClientInterface([]));
+        $client = $this->getClientInterface(['get' => []]);
 
-        $this->assertEquals([], $adapter->getMimetype('foo'));
-        $this->assertEquals([], $adapter->getMimetype('bar'));
+        $client->expects($this->exactly(2))->method('get')
+            ->withConsecutive(
+                ['foo'],
+                ['bar']
+            )
+            ->willReturnOnConsecutiveCalls(
+                'foo/bar',
+                'foo/baz'
+            );
+        $adapter = new RedisAdapter($client);
+
+        $this->assertEquals(['mimetype' => 'text/plain'], $adapter->getMimetype('foo'));
+        $this->assertEquals(['mimetype' => 'text/plain'], $adapter->getMimetype('bar'));
     }
 
     public function testItReturnsNothingForTheTimestamp()
     {
         $adapter = new RedisAdapter($this->getClientInterface([]));
 
-        $this->assertEquals([], $adapter->getTimestamp('foo'));
-        $this->assertEquals([], $adapter->getTimestamp('bar'));
+        $this->assertEquals(false, $adapter->getTimestamp('foo'));
+        $this->assertEquals(false, $adapter->getTimestamp('bar'));
     }
 
     public function expirationConfigOptions()
@@ -563,7 +602,7 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
             'set' => [
                 'expects' => $this->once(),
                 'with'    => [
-                    'foo', 'bar', null, null, $sFlag,
+                    'foo', 'bar', $sFlag,
                 ],
                 'willReturn' => true,
             ],

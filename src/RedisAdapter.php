@@ -34,7 +34,7 @@ class RedisAdapter implements AdapterInterface
      *
      * @param string $path
      * @param string $contents
-     * @param Config $config   Config object
+     * @param Config $config Config object
      *
      * @return array|false false on failure file meta data on success
      */
@@ -44,7 +44,16 @@ class RedisAdapter implements AdapterInterface
             $config->set('expirationType', self::EXPIRE_IN_SECONDS);
         }
 
-        if (!$this->client->set($path, $contents, $config->get('expirationType'), $config->get('ttl'), $config->get('setFlag'))) {
+        $args = array_filter([
+            $path,
+            $contents,
+            $config->get('expirationType'),
+            $config->get('ttl'),
+            $config->get('setFlag')
+        ]);
+
+
+        if (!call_user_func_array([$this->client, 'set'], $args)) {
             return false;
         }
 
@@ -56,7 +65,7 @@ class RedisAdapter implements AdapterInterface
      *
      * @param string $path
      * @param string $contents
-     * @param Config $config   Config object
+     * @param Config $config Config object
      *
      * @return array|false false on failure file meta data on success
      */
@@ -106,7 +115,7 @@ class RedisAdapter implements AdapterInterface
      */
     public function delete($path)
     {
-        return $this->client->del([$path]);
+        return (bool)$this->client->del([$path]);
     }
 
     /**
@@ -118,7 +127,7 @@ class RedisAdapter implements AdapterInterface
      */
     public function deleteDir($dirname)
     {
-        return $this->client->del($this->client->keys($dirname.'/*'));
+        return (bool)$this->client->del($this->client->keys($dirname . '/*'));
     }
 
     /**
@@ -186,7 +195,7 @@ class RedisAdapter implements AdapterInterface
      */
     public function listContents($directory = '', $recursive = false)
     {
-        $keys = $this->client->keys($directory.'/*');
+        $keys = $this->client->keys($directory . '/*');
 
         $values = [];
 
@@ -198,7 +207,10 @@ class RedisAdapter implements AdapterInterface
             $stream = tmpfile();
             fwrite($stream, $this->client->get($key));
             rewind($stream);
-            $values[$key] = ['type' => Util::guessMimeType(stream_get_meta_data($stream)['uri'], stream_get_contents($stream))];
+            $values[$key] = [
+                'mimetype' => Util::guessMimeType(stream_get_meta_data($stream)['uri'], stream_get_contents($stream)),
+                'type' => 'file'
+            ];
         }
 
         return Util::emulateDirectories($values);
@@ -213,7 +225,14 @@ class RedisAdapter implements AdapterInterface
      */
     public function getMetadata($path)
     {
-        return [];
+        $stream = tmpfile();
+        fwrite($stream, $this->client->get($path));
+        rewind($stream);
+
+        return [
+            'mimetype' => Util::guessMimeType(stream_get_meta_data($stream)['uri'], stream_get_contents($stream)),
+            'type' => 'file'
+        ];
     }
 
     /**
@@ -225,7 +244,7 @@ class RedisAdapter implements AdapterInterface
      */
     public function getSize($path)
     {
-        return [];
+        return ['size' => $this->client->strlen($path)];
     }
 
     /**
@@ -237,7 +256,11 @@ class RedisAdapter implements AdapterInterface
      */
     public function getMimetype($path)
     {
-        return [];
+        $stream = tmpfile();
+        fwrite($stream, $this->client->get($path));
+        rewind($stream);
+
+        return ['mimetype' => Util::guessMimeType(stream_get_meta_data($stream)['uri'], stream_get_contents($stream))];
     }
 
     /**
@@ -249,7 +272,7 @@ class RedisAdapter implements AdapterInterface
      */
     public function getTimestamp($path)
     {
-        return [];
+        return false;
     }
 
     /**
