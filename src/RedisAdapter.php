@@ -34,7 +34,7 @@ class RedisAdapter implements AdapterInterface
      *
      * @param string $path
      * @param string $contents
-     * @param Config $config Config object
+     * @param Config $config   Config object
      *
      * @return array|false false on failure file meta data on success
      */
@@ -49,9 +49,8 @@ class RedisAdapter implements AdapterInterface
             $contents,
             $config->get('expirationType'),
             $config->get('ttl'),
-            $config->get('setFlag')
+            $config->get('setFlag'),
         ]);
-
 
         if (!call_user_func_array([$this->client, 'set'], $args)) {
             return false;
@@ -65,7 +64,7 @@ class RedisAdapter implements AdapterInterface
      *
      * @param string $path
      * @param string $contents
-     * @param Config $config Config object
+     * @param Config $config   Config object
      *
      * @return array|false false on failure file meta data on success
      */
@@ -115,7 +114,7 @@ class RedisAdapter implements AdapterInterface
      */
     public function delete($path)
     {
-        return (bool)$this->client->del([$path]);
+        return (bool) $this->client->del([$path]);
     }
 
     /**
@@ -127,7 +126,7 @@ class RedisAdapter implements AdapterInterface
      */
     public function deleteDir($dirname)
     {
-        return (bool)$this->client->del($this->client->keys($dirname . '/*'));
+        return (bool) $this->client->del($this->client->keys($dirname.'/*'));
     }
 
     /**
@@ -195,7 +194,7 @@ class RedisAdapter implements AdapterInterface
      */
     public function listContents($directory = '', $recursive = false)
     {
-        $keys = $this->client->keys($directory . '/*');
+        $keys = $this->client->keys($directory.'/*');
 
         $values = [];
 
@@ -209,7 +208,7 @@ class RedisAdapter implements AdapterInterface
             rewind($stream);
             $values[$key] = [
                 'mimetype' => Util::guessMimeType(stream_get_meta_data($stream)['uri'], stream_get_contents($stream)),
-                'type' => 'file'
+                'type'     => 'file',
             ];
         }
 
@@ -231,7 +230,7 @@ class RedisAdapter implements AdapterInterface
 
         return [
             'mimetype' => Util::guessMimeType(stream_get_meta_data($stream)['uri'], stream_get_contents($stream)),
-            'type' => 'file'
+            'type'     => 'file',
         ];
     }
 
