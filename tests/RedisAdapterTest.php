@@ -53,9 +53,9 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
     public function provideFalsyThings()
     {
         return [
-            'false' => [false],
-            'null' => [null],
-            'Zero' => [0],
+            'false'        => [false],
+            'null'         => [null],
+            'Zero'         => [0],
             'Empty string' => [''],
         ];
     }
