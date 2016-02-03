@@ -55,7 +55,7 @@ class RedisAdapter implements AdapterInterface
                     $config->get('ttl'),
                     $config->get('setFlag'),
                 ],
-                function($value) {
+                function ($value) {
                     return !is_null($value);
                 }
             )
