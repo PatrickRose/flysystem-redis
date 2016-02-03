@@ -50,6 +50,39 @@ class RedisAdapterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function provideFalsyThings()
+    {
+        return [
+            'false' => [false],
+            'null' => [null],
+            'Zero' => [0],
+            'Empty string' => [''],
+        ];
+    }
+
+    /**
+     * @dataProvider provideFalsyThings
+     */
+    public function testItAllowsYouToWriteFalsyThingsToAFile($toWrite)
+    {
+        $client = $this->getClientInterface([
+            'set' => [
+                'expects'    => $this->once(),
+                'with'       => [$this->equalTo('foo'), $this->equalTo($toWrite)],
+                'willReturn' => true,
+            ],
+        ]);
+
+        $adapter = new RedisAdapter($client);
+        $this->assertEquals(
+            [
+                'path'     => 'foo',
+                'contents' => $toWrite,
+            ],
+            $adapter->write('foo', $toWrite, new Config())
+        );
+    }
+
     public function testItReturnsFalseIfItDidntWrite()
     {
         $client = $this->getClientInterface([

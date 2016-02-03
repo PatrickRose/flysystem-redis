@@ -44,13 +44,22 @@ class RedisAdapter implements AdapterInterface
             $config->set('expirationType', self::EXPIRE_IN_SECONDS);
         }
 
-        $args = array_filter([
-            $path,
-            $contents,
-            $config->get('expirationType'),
-            $config->get('ttl'),
-            $config->get('setFlag'),
-        ]);
+        $args = array_merge(
+            [
+                $path,
+                $contents,
+            ],
+            array_filter(
+                [
+                    $config->get('expirationType'),
+                    $config->get('ttl'),
+                    $config->get('setFlag'),
+                ],
+                function($value) {
+                    return !is_null($value);
+                }
+            )
+        );
 
         if (!call_user_func_array([$this->client, 'set'], $args)) {
             return false;
