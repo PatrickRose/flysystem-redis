@@ -21,7 +21,7 @@ With composer of course:
 
 ```php
 $client = new Predis\Client();
-$adapter = new PatrickRose\Flysystem\RedisAdapter($client);
+$adapter = new PatrickRose\Flysystem\Redis\RedisAdapter($client);
 
 $filesystem = new League\Flysystem\Filesystem($adapter);
 ```
